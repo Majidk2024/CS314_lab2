@@ -69,6 +69,12 @@
 // }
 // above code focus on left first and then focusses on the right side by ensuring  the left side completed but gets the execution unbalanced 
 
+
+#include <iostream>
+#include <fstream>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <signal.h>
 using namespace std;
 
 void partition_and_search(const char* file_to_search_in, const char* pattern_to_search_for, int search_start_position, int search_end_position, int max_chunk_size) {
