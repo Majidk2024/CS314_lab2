@@ -1,3 +1,74 @@
+// #include <iostream>
+// #include <fstream>
+// #include <cstring>
+// #include <unistd.h>
+// #include <signal.h>
+
+// using namespace std;
+
+// void search(char **argv, int current_position = 0) {
+//     char *file_to_search_in = argv[1];
+//     char *pattern_to_search_for = argv[2];
+//     int search_start_position = atoi(argv[3]);
+//     int search_end_position = atoi(argv[4]);
+
+//     ifstream file(file_to_search_in, ios::in | ios::binary); // Open file in binary mode
+//     if (!file.is_open()) {
+//         cerr << "Unable to open file: " << file_to_search_in << endl;
+//         return;
+//     }
+
+//     int new_current_position = search_start_position + current_position;
+//     int length_to_read = search_end_position - new_current_position + 1;
+
+//     if (length_to_read <= 0) {
+//         file.close();
+//         return; // Stop recursion if there's no content left to read
+//     }
+
+//     // Adjust length_to_read if it's too large
+//     if (length_to_read > 1024 * 1024) { // Example: read in chunks of 1MB
+//         length_to_read = 1024 * 1024;
+//     }
+
+//     char *buffer = new char[length_to_read + 1]; // +1 for null terminator
+
+//     file.seekg(new_current_position, ios::beg);
+//     file.read(buffer, length_to_read);
+
+//     // Check if the read operation was successful
+//     if (file.gcount() == 0) {
+//         delete[] buffer;
+//         file.close();
+//         return; // End of file or no content read
+//     }
+
+//     buffer[file.gcount()] = '\0'; // Null-terminate the buffer
+
+//     string content(buffer);
+//     delete[] buffer;
+//     file.close();
+
+//     size_t found_pos = content.find(pattern_to_search_for);
+//     if (found_pos != string::npos) {
+//         cout << "[" << getpid() << "] found at " << (new_current_position + found_pos) << endl;
+//         // Recursively search from the next position after the found pattern
+//         search(argv, current_position + found_pos + strlen(pattern_to_search_for));
+//     } else {
+//         cout << "[" << getpid() << "] didn't find" << endl;
+//     }
+// }
+
+// int main(int argc, char **argv) {
+//     if (argc != 5) {
+//         cout << "Usage: ./partitioner.out <path-to-file> <pattern> <search-start-position> <search-end-position>\nProvided arguments:\n";
+//         for (int i = 0; i < argc; i++)
+//             cout << argv[i] << "\n";
+//         return -1;
+//     }
+//     search(argv);
+//     return 0;
+// }
 #include <iostream>
 #include <fstream>
 #include <cstring>
