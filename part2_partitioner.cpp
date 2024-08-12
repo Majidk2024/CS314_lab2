@@ -67,21 +67,20 @@
 //     partition_and_search(file_to_search_in, pattern_to_search_for, search_start_position, search_end_position, max_chunk_size);
 //     return 0;
 // }
-// above code focus on left first and then focusses on the right side by ensuring  the left side completed but gets the execution unbalanced 
-
 
 #include <iostream>
 #include <fstream>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <signal.h>
+
 using namespace std;
 
 void partition_and_search(const char* file_to_search_in, const char* pattern_to_search_for, int search_start_position, int search_end_position, int max_chunk_size) {
     pid_t my_pid = getpid();
     int chunk_size = (search_end_position - search_start_position) + 1;
     
-    cout << "[" << my_pid << "] start position = " << search_start_position << " ; end position = " << search_end_position << "\n";
+    cout << "[" << my_pid << "] start position = " << search_start_position << " ; end position = " << search_end_position << endl;
     
     if(chunk_size <= max_chunk_size) {
         pid_t searcher_pid = fork();
@@ -103,17 +102,16 @@ void partition_and_search(const char* file_to_search_in, const char* pattern_to_
             partition_and_search(file_to_search_in, pattern_to_search_for, search_start_position, middle_position, max_chunk_size);
             exit(0);
         } else if(left_child > 0) {
-            cout << '[' << my_pid << ']' << " forked the left_child: " << left_child << endl;
-            int status;
-            waitpid(left_child, &status, 0);
-            cout << '[' << my_pid << ']' << " left child returned with status: " << status << endl;
-
             pid_t right_child = fork();
             if(right_child == 0) {
                 partition_and_search(file_to_search_in, pattern_to_search_for, middle_position + 1, search_end_position, max_chunk_size);
                 exit(0);
             } else if(right_child > 0) {
+                cout << '[' << my_pid << ']' << " forked the left_child: " << left_child << endl;
                 cout << '[' << my_pid << ']' << " forked the right_child: " << right_child << endl;
+                int status;
+                waitpid(left_child, &status, 0);
+                cout << '[' << my_pid << ']' << " left child returned with status: " << status << endl;
                 waitpid(right_child, &status, 0);
                 cout << '[' << my_pid << ']' << " right child returned with status: " << status << endl;
             }
@@ -125,7 +123,7 @@ int main(int argc, char **argv) {
     if(argc != 6) {
         cout << "usage: ./partitioner.out <path-to-file> <pattern> <search-start-position> <search-end-position> <max-chunk-size>\nprovided arguments:\n";
         for(int i = 0; i < argc; i++)
-            cout << argv[i] << "\n";
+            cout << argv[i] << endl;
         return -1;
     }
     
